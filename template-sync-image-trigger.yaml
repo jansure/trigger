@@ -47,11 +47,11 @@ spec:
         - name: "sourceImageRepository"
           sourceImageFlag: true
           schema:
-            type: alauda.io/DisplayDockerImageRepositoryPullMix
+            type: alauda.io/dockerimagerepositorypullmix
           binding:
             - alaudaSyncImage.args.sourceImageRepository
           display:
-            type: alauda.io/DisplayDockerImageRepositoryPullMix
+            type: alauda.io/dockerimagerepositorypullmix
             name:
               zh-CN: "源镜像仓库地址"
               en: "Address of source Image repository"
@@ -146,11 +146,11 @@ spec:
           value: "输入"
         - name: "targetImageRepository"
           schema:
-            type: alauda.io/DisplayDockerImageRepositoryMix
+            type: alauda.io/dockerimagerepositorymix
           binding:
             - alaudaSyncImage.args.targetImageRepository
           display:
-            type: alauda.io/DisplayDockerImageRepositoryMix
+            type: alauda.io/dockerimagerepositorymix
             name:
               zh-CN: "目标镜像仓库地址"
               en: "Address of target Image repository"
