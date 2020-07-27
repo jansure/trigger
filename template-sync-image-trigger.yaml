@@ -10,7 +10,7 @@ metadata:
     version: "2.10.4"
     style.icon: docker
   labels:
-    category: SyncImage
+    category: SyncImage    
 spec:
   engine: graph
   withSCM: false
@@ -47,11 +47,11 @@ spec:
         - name: "sourceImageRepository"
           sourceImageFlag: true
           schema:
-            type: alauda.io/dockerimagerepositorypullmix
+            type: string
           binding:
             - alaudaSyncImage.args.sourceImageRepository
           display:
-            type: alauda.io/dockerimagerepositorypullmix
+            type: alauda.io/imageRepository
             name:
               zh-CN: "源镜像仓库地址"
               en: "Address of source Image repository"
@@ -146,11 +146,11 @@ spec:
           value: "输入"
         - name: "targetImageRepository"
           schema:
-            type: alauda.io/dockerimagerepositorymix
+            type: string
           binding:
             - alaudaSyncImage.args.targetImageRepository
           display:
-            type: alauda.io/dockerimagerepositorymix
+            type: alauda.io/imageRepository
             name:
               zh-CN: "目标镜像仓库地址"
               en: "Address of target Image repository"
