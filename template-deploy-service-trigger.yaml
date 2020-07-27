@@ -109,13 +109,13 @@ spec:
           value: ""
         - name: "imageRepositoryDeploy"
           schema:
-            type: alauda.io/imagePullRepositoryList
+            type: string
           binding:
             - deployService.args.imageRepositoryDeploy
           required: true
           value: ""
           display:
-            type: alauda.io/imagePullRepositoryList
+            type: alauda.io/imageRepository
             name:
               zh-CN: "镜像仓库"
               en: Repository
@@ -268,20 +268,8 @@ spec:
                 name: UseNotification
                 value: true
   supportedTriggers:
-    - type: imageTrigger,
+    - type: imageTrigger
       enabled: true,
       sourceImageRepository: sourceImageRepository,
       sourceImageTag: "sourceImageTag"
-    - type: cron,
-      enabled: false,
-      rule:
-        schedule:
-          weeks:
-            mon,
-            "tue",
-            "wed",
-            "thu",
-            "fri",
-            "sat",
-            "sun"
-          times: "00:00"
+    - type: cron
