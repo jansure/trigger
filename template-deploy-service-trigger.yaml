@@ -269,11 +269,6 @@ spec:
                 value: true
   supportedTriggers:
     - type:
-        imageTrigger:
-          enabled: true,
-          sourceImageRepository: sourceImageRepository,
-          sourceImageTag: "sourceImageTag"
-    - type:
         cron:
           enabled: false,
           rule:
