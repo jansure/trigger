@@ -61,28 +61,28 @@ spec:
           required: true
           value: ""
         - name: "syncSourceImageTag"
-            schema:
-              type: radio
-              values:
-                - "alterationTag"
-                - "assignTag"
-            binding:
-              - alaudaSyncImage.args.syncSourceImageTag
-            display:
-              type: "radio"
-              advanced: true
-              name:
-                zh-CN: "同步源镜像标签"
-                en: "Sync Source Image Tag"
-              values:
-                - "同步变动标签"
-                - "同步指定标签"
-              description:
-                zh-CN: "同步源镜像标签。例：同步变动标签"
-                en: "Switch synchronized source image tag,for example \"sync alteration tag\"."
-            required: true
-            default: "alterationTag"
-            value: "同步变动标签"
+          schema:
+            type: radio
+            values:
+              - "alterationTag"
+              - "assignTag"
+          binding:
+            - alaudaSyncImage.args.syncSourceImageTag
+          display:
+            type: "radio"
+            advanced: true
+            name:
+              zh-CN: "同步源镜像标签"
+              en: "Sync Source Image Tag"
+            values:
+              - "同步变动标签"
+              - "同步指定标签"
+            description:
+              zh-CN: "同步源镜像标签。例：同步变动标签"
+              en: "Switch synchronized source image tag,for example \"sync alteration tag\"."
+          required: true
+          default: "alterationTag"
+          value: "同步变动标签"
         - name: "sourceImageTag"
           schema:
             type: string
@@ -122,28 +122,28 @@ spec:
         en: "Target Image Info"
       items:
         - name: imageRepositoryMode
-            schema:
-              type: radio
-              values:
-                - "choice"
-                - "input"
-            binding:
-              - deployService.args.imageRepositoryMode
-            display:
-              type: radio
-              advanced: true
-              name:
-                zh-CN: "方式"
-                en: "Source Image Mode"
-              values:
-                - "选择"
-                - "输入"
-              description:
-                zh-CN: "镜像仓库地址输入方式。例：选择"
-                en: "Target Image Repository Mode."
-            required: true
-            default: "choice"
-            value: "输入"
+          schema:
+            type: radio
+            values:
+              - "choice"
+              - "input"
+          binding:
+            - deployService.args.imageRepositoryMode
+          display:
+            type: radio
+            advanced: true
+            name:
+              zh-CN: "方式"
+              en: "Source Image Mode"
+            values:
+              - "选择"
+              - "输入"
+            description:
+              zh-CN: "镜像仓库地址输入方式。例：选择"
+              en: "Target Image Repository Mode."
+          required: true
+          default: "choice"
+          value: "输入"
         - name: "targetImageRepository"
           schema:
             type: alauda.io/imageRepositoryList
@@ -232,21 +232,21 @@ spec:
                 value: true
   supportedTriggers:
     - type:
-        imageTrigger:
-          enabled: true,
-          sourceImageRepository: "sourceImageRepository",
-          sourceImageTag: "sourceImageTag"
+      imageTrigger:
+        enabled: true,
+        sourceImageRepository: sourceImageRepository,
+        sourceImageTag: sourceImageTag
     - type:
         cron:
           enabled: false,
-          rule: "",
+          rule:
         schedule:
           weeks:
-              "mon",
-                "tue",
-                "wed",
-                "thu",
-                "fri",
-                "sat",
-                "sun"
+            mon,
+            tue,
+            wed,
+            thu,
+            fri,
+            sat,
+            sun
           times: "00:00"
