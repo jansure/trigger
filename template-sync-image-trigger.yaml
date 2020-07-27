@@ -231,10 +231,9 @@ spec:
                 name: UseNotification
                 value: true
   supportedTriggers:
-    - type:
-        cron:
-          enabled: false,
-          rule:
+    - type: cron
+      enabled: false,
+      rule:
         schedule:
           weeks:
             mon,
