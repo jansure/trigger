@@ -1,0 +1,252 @@
+apiVersion: devops.alauda.io/v1alpha1
+kind: ClusterPipelineTemplate
+metadata:
+  name: alaudaSyncImageTrigger
+  annotations:
+    displayName.zh-CN: 触发器同步镜像
+    displayName.en: Trigger Sync Image
+    description.zh-CN: 触发器同步镜像模板。触发器接收到源镜像仓库变更，就将一个镜像从源仓库同步到目标仓库。若源镜像或目标镜像仓库为私有仓库（内网地址），需确保 Jenkins 服务与其在同一网络环境内，方可使用。
+    description.en: Trigger Sync image template. When trigger receive a alteration，then synchronize a Image tag from the source repository to the target repository. If the source image or target image repository is a private repository (intranet address), ensure that Jenkins services are available in the same network.
+    version: "2.10.0"
+    style.icon: docker
+  labels:
+    category: SyncImage
+spec:
+  engine: graph
+  withSCM: false
+  agent:
+    label: tools
+    labelMatcher: tools
+  options:
+    raw: "buildDiscarder(logRotator(numToKeepStr: '200'))"
+  stages:
+    - name: SyncImage
+      tasks:
+        - name: alaudaSyncImage
+          kind: ClusterPipelineTaskTemplate
+          type: public/alaudaSyncImage
+  post:
+    always:
+      - name: notification
+        kind: ClusterPipelineTaskTemplate
+        relation:
+          - action: show
+            when:
+              name: UseNotification
+              value: true
+  parameters:
+    - name: imageTag
+      type: StringParameterDefinition
+      value: "latest"
+      description: Image Tag
+  arguments:
+    - displayName:
+        zh-CN: "源镜像信息"
+        en: "Source Image Info"
+      items:
+        - name: "sourceImageRepository"
+          sourceImageFlag: true
+          schema:
+            type: alauda.io/imageRepositoryList
+          binding:
+            - alaudaSyncImage.args.sourceImageRepository
+          display:
+            type: alauda.io/imageRepositoryList
+            name:
+              zh-CN: "源镜像仓库地址"
+              en: "Address of source Image repository"
+            description:
+              zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
+              en: "When synchronizing the images, select the source images directly if the images are platform images. If the source images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
+          required: true
+          value: ""
+        - name: "syncSourceImageTag"
+            schema:
+              type: radio
+              values:
+                - "alterationTag"
+                - "assignTag"
+            binding:
+              - alaudaSyncImage.args.syncSourceImageTag
+            display:
+              type: "radio"
+              advanced: true
+              name:
+                zh-CN: "同步源镜像标签"
+                en: "Sync Source Image Tag"
+              values:
+                - "同步变动标签"
+                - "同步指定标签"
+              description:
+                zh-CN: "同步源镜像标签。例：同步变动标签"
+                en: "Switch synchronized source image tag,for example \"sync alteration tag\"."
+            required: true
+            default: "alterationTag"
+            value: "同步变动标签"
+        - name: "sourceImageTag"
+          schema:
+            type: string
+          binding:
+            - alaudaSyncImage.args.sourceImageTag
+          display:
+            type: string
+            advanced: true
+            name:
+              zh-CN: "源镜像标签"
+              en: "Source image tag"
+            description:
+              zh-CN: "源镜像的版本。例：latest"
+              en: "When synchronizing the images, enter the version of the source image, for example, latest."
+          required: true
+          default: ${imageTag}
+          value: ""
+        - name: "sourceCredentialsId"
+          schema:
+            type: string
+          binding:
+            - alaudaSyncImage.args.sourceCredentialsId
+          display:
+            type: alauda.io/jenkinscredentials
+            args:
+              type: kubernetes.io/dockerconfigjson
+            name:
+              zh-CN: "源镜像凭据"
+              en: "Source Credentials"
+            description:
+              zh-CN: "拉取镜像时，使用的凭据"
+              en: "Source Credentials"
+          required: false
+          value: ""
+    - displayName:
+        zh-CN: "目标镜像信息"
+        en: "Target Image Info"
+      items:
+        - name: imageRepositoryMode
+            schema:
+              type: radio
+              values:
+                - "choice"
+                - "input"
+            binding:
+              - deployService.args.imageRepositoryMode
+            display:
+              type: radio
+              advanced: true
+              name:
+                zh-CN: "方式"
+                en: "Source Image Mode"
+              values:
+                - "选择"
+                - "输入"
+              description:
+                zh-CN: "镜像仓库地址输入方式。例：选择"
+                en: "Target Image Repository Mode."
+            required: true
+            default: "choice"
+            value: "输入"
+        - name: "targetImageRepository"
+          schema:
+            type: alauda.io/imageRepositoryList
+          binding:
+            - alaudaSyncImage.args.targetImageRepository
+          display:
+            type: alauda.io/imageRepositoryList
+            name:
+              zh-CN: "目标镜像仓库地址"
+              en: "Address of target Image repository"
+            description:
+              zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
+              en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
+          required: true
+          value: ""
+        - name: "targetImageTag"
+          schema:
+            type: string
+          binding:
+            - alaudaSyncImage.args.targetImageTag
+          display:
+            type: string
+            advanced: true
+            name:
+              zh-CN: "目标镜像标签"
+              en: "Target image tag"
+            description:
+              zh-CN: "同步镜像时，生成镜像的标签"
+              en: "When synchronizing the images, enter the version of the target image, for example, latest."
+          required: true
+          default: ${imageTag}
+          value: ""
+        - name: "targetCredentialsId"
+          schema:
+            type: string
+          binding:
+            - alaudaSyncImage.args.targetCredentialsId
+          display:
+            type: alauda.io/jenkinscredentials
+            args:
+              type: kubernetes.io/dockerconfigjson
+            name:
+              zh-CN: "目标镜像凭据"
+              en: "Target Credentials"
+            description:
+              zh-CN: "推送镜像时，使用的凭据"
+              en: "Target Credentials"
+          required: false
+          value: ""
+    - displayName:
+        zh-CN: "通知"
+        en: "Notification"
+      items:
+        - name: "UseNotification"
+          schema:
+            type: boolean
+          display:
+            type: boolean
+            name:
+              zh-CN: "开启通知"
+              en: "Use Notification"
+            description:
+              zh-CN: "开启后，可选择已创建好的通知，当流水线执行完成后，会根据通知设置发送通知。"
+              en: "After opening, you can choose the created notification. When the pipeline is completed, the notification will be sent according to the notification settings."
+          required: false
+          value: "false"
+        - name: "PlatformNotification"
+          schema:
+            type: alauda.io/notificationmix
+          required: true
+          binding:
+            - notification.args.PlatformNotification
+          value: ""
+          display:
+            type: alauda.io/notificationmix
+            name:
+              zh-CN: "通知"
+              en: Notification
+            description:
+              zh-CN: "选择已创建好的通知（由管理员创建），将根据选择对流水线进行通知。"
+              en: "Select the created notification (created by the administrator), and the pipeline will be notified according to the selection."
+          relation:
+            - action: show
+              when:
+                name: UseNotification
+                value: true
+  supportedTriggers:
+    - type:
+        imageTrigger:
+          enabled: true,
+          sourceImageRepository: "sourceImageRepository",
+          sourceImageTag: "sourceImageTag"
+    - type:
+        cron:
+          enabled: false,
+          rule: "",
+        schedule:
+          weeks:
+              "mon",
+                "tue",
+                "wed",
+                "thu",
+                "fri",
+                "sat",
+                "sun"
+          times: "00:00"
