@@ -10,7 +10,7 @@ metadata:
     version: "2.10.6"
     style.icon: docker
   labels:
-    category: SyncImage    
+    category: SyncImage
 spec:
   engine: graph
   withSCM: false
@@ -70,7 +70,7 @@ spec:
             - alaudaSyncImage.args.syncSourceImageTag
           display:
             type: "radio"
-            advanced: true
+            advanced: false
             name:
               zh-CN: "同步源镜像标签"
               en: "Sync Source Image Tag"
@@ -90,7 +90,7 @@ spec:
             - alaudaSyncImage.args.sourceImageTag
           display:
             type: string
-            advanced: true
+            advanced: false
             name:
               zh-CN: "源镜像标签"
               en: "Source image tag"
@@ -131,7 +131,7 @@ spec:
             - deployService.args.imageRepositoryMode
           display:
             type: radio
-            advanced: true
+            advanced: false
             name:
               zh-CN: "方式"
               en: "Source Image Mode"
@@ -166,7 +166,7 @@ spec:
             - alaudaSyncImage.args.targetImageTag
           display:
             type: string
-            advanced: true
+            advanced: false
             name:
               zh-CN: "目标镜像标签"
               en: "Target image tag"
@@ -235,4 +235,4 @@ spec:
       enabled: true,
       sourceImageRepository: sourceImageRepository,
       sourceImageTag: sourceImageTag
-    - type: cron   
+    - type: cron
