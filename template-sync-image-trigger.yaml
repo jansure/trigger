@@ -63,7 +63,7 @@ spec:
         - name: "syncSourceImageTag"
           schema:
             type: string
-            values:
+            enum:
               - "alterationTag"
               - "assignTag"
           binding:
@@ -74,7 +74,7 @@ spec:
             name:
               zh-CN: "同步源镜像标签"
               en: "Sync Source Image Tag"
-            values:
+            enumAlias:
               - "同步变动标签"
               - "同步指定标签"
             description:
@@ -112,7 +112,7 @@ spec:
         - name: imageRepositoryMode
           schema:
             type: string
-            values:
+            enum:
               - "choice"
               - "input"
           binding:
@@ -123,7 +123,7 @@ spec:
             name:
               zh-CN: "方式"
               en: "Source Image Mode"
-            values:
+            enumAlias:
               - "选择"
               - "输入"
             description:
@@ -134,11 +134,11 @@ spec:
           value: "选择"
         - name: "targetImageRepositoryList"
           schema:
-            type: string
+            type: imageRepositoryList
           binding:
             - alaudaSyncImage.args.targetImageRepositoryList
           display:
-            type: alauda.io/imageRepositoryList
+            type: imageRepositoryList
             name:
               zh-CN: "目标镜像仓库地址"
               en: "Address of target Image repository"
@@ -172,23 +172,6 @@ spec:
                 when:
                   name: imageRepositoryMode
                   value: "input"
-        - name: "targetImageTag"
-          schema:
-            type: string
-          binding:
-            - alaudaSyncImage.args.targetImageTag
-          display:
-            type: string
-            advanced: false
-            name:
-              zh-CN: "目标镜像标签"
-              en: "Target image tag"
-            description:
-              zh-CN: "同步镜像时，生成镜像的标签"
-              en: "When synchronizing the images, enter the version of the target image, for example, latest."
-          required: true
-          default: ${imageTag}
-          value: ""
         - name: "targetCredentialsId"
           schema:
             type: string
@@ -206,6 +189,11 @@ spec:
               en: "Target Credentials"
           required: false
           value: ""
+          relation:
+              - action: show
+                when:
+                  name: imageRepositoryMode
+                  value: "input"
     - displayName:
         zh-CN: "通知"
         en: "Notification"
