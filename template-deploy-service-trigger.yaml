@@ -110,7 +110,7 @@ spec:
         - name: imageRepositoryMode
           schema:
               type: string
-              values:
+              enum:
                 - "choice"
                 - "input"
           binding:
@@ -121,7 +121,7 @@ spec:
               name:
                 zh-CN: "方式"
                 en: "Source Image Mode"
-              values:
+              enumAlias:
                 - "选择"
                 - "输入"
               description:
@@ -132,13 +132,13 @@ spec:
           value: "输入"
         - name: "imageDestRepository"
           schema:
-            type: string
+            type: imageRepositoryList
           binding:
             - deployService.args.imageDestRepository
           required: true
           value: ""
           display:
-            type: alauda.io/imageRepository
+            type: imageRepositoryList
             name:
               zh-CN: "镜像仓库"
               en: Repository
