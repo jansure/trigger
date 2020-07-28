@@ -7,7 +7,7 @@ metadata:
     displayName.en: "Trigger Update Application"
     description.zh-CN: "触发器更新应用"
     description.en: "Trigger Update Application"
-    version: "2.11.3"
+    version: "2.11.6"
     style.icon: kubernetes
   labels:
     category: DeployService
@@ -132,7 +132,7 @@ spec:
             - deployService.args.imageRepositoryMode
           display:
             type: radio
-            advanced: true
+            advanced: false
             name:
               zh-CN: "方式"
               en: "Source Image Mode"
@@ -155,7 +155,7 @@ spec:
             - deployService.args.deployTag
           display:
             type: radio
-            advanced: true
+            advanced: false
             name:
               zh-CN: "应用更新标签"
               en: "Sync Source Image Tag"
@@ -191,7 +191,7 @@ spec:
           value: ""
           display:
             type: string
-            advanced: true
+            advanced: false
             name:
               zh-CN: "启动命令"
               en: "command"
@@ -206,7 +206,7 @@ spec:
             - deployService.args.args
           display:
             type: string
-            advanced: true
+            advanced: false
             name:
               zh-CN: "参数"
               en: "args"
@@ -220,7 +220,7 @@ spec:
             - deployService.args.timeout
           display:
             type: string
-            advanced: true
+            advanced: false
             name:
               zh-CN: "超时时间（秒）"
               en: "Timeout (s)"
