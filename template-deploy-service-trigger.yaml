@@ -202,7 +202,7 @@ spec:
               type: string
               advanced: false
               name:
-                zh-CN: "更新标签标签"
+                zh-CN: "更新标签"
                 en: "Update image tag"
               description:
                 zh-CN: "更新应用的版本。例：latest"
@@ -215,6 +215,28 @@ spec:
                 when:
                   name: deployTag
                   value: "assignTag"
+        - name: "sourceCredentialsId"
+          schema:
+              type: string
+          binding:
+              - alaudaSyncImage.args.sourceCredentialsId
+          display:
+              type: alauda.io/jenkinscredentials
+              args:
+                type: kubernetes.io/dockerconfigjson
+              name:
+                zh-CN: "凭据"
+                en: "Credentials"
+          description:
+                zh-CN: "更新应用时需要拉取镜像所使用的凭据"
+                en: "Source Image Repository Credentials"
+          required: false
+          value: ""
+          relation:
+            - action: show
+              when:
+                name: deployTag
+                value: "assignTag"
         - name: "rollback"
           schema:
             type: boolean
