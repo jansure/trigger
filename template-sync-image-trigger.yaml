@@ -105,23 +105,6 @@ spec:
               when:
                 name: syncSourceImageTag
                 value: "assignTag"
-        - name: "sourceCredentialsId"
-          schema:
-            type: string
-          binding:
-            - alaudaSyncImage.args.sourceCredentialsId
-          display:
-            type: alauda.io/jenkinscredentials
-            args:
-              type: kubernetes.io/dockerconfigjson
-            name:
-              zh-CN: "源镜像凭据"
-              en: "Source Credentials"
-            description:
-              zh-CN: "拉取镜像时，使用的凭据"
-              en: "Source Credentials"
-          required: false
-          value: ""
     - displayName:
         zh-CN: "目标镜像信息"
         en: "Target Image Info"
