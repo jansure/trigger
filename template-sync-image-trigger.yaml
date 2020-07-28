@@ -100,6 +100,11 @@ spec:
           required: true
           default: ${imageTag}
           value: ""
+          relation:
+            - action: show
+              when:
+                name: syncSourceImageTag
+                value: "assignTag"
         - name: "sourceCredentialsId"
           schema:
             type: string
@@ -143,14 +148,14 @@ spec:
               en: "Target Image Repository Mode."
           required: true
           default: "choice"
-          value: "输入"
-        - name: "targetImageRepository"
+          value: "选择"
+        - name: "targetImageRepositoryList"
           schema:
             type: string
           binding:
-            - alaudaSyncImage.args.targetImageRepository
+            - alaudaSyncImage.args.targetImageRepositoryList
           display:
-            type: alauda.io/imageRepository
+            type: alauda.io/imageRepositoryList
             name:
               zh-CN: "目标镜像仓库地址"
               en: "Address of target Image repository"
@@ -159,6 +164,31 @@ spec:
               en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
           required: true
           value: ""
+          relation:
+            - action: show
+              when:
+                name: imageRepositoryMode
+                value: "choice"
+        - name: "targetImageRepository"
+            schema:
+              type: string
+            binding:
+              - alaudaSyncImage.args.targetImageRepository
+            display:
+              type: string
+              name:
+                zh-CN: "目标镜像仓库地址"
+                en: "Address of target Image repository"
+              description:
+                zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
+                en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
+            required: false
+            value: ""
+            relation:
+              - action: show
+                when:
+                  name: imageRepositoryMode
+                  value: "input"
         - name: "targetImageTag"
           schema:
             type: string
