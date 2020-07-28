@@ -124,7 +124,7 @@ spec:
               en: "When the tag value of the image repository is ${imageTag}, it will be manually triggered, and it will be updated according to the tag entered in the pop-up box during execution. It will be automatically triggered, and the latest will be updated according to tag. When the tag value is not ${imageTag}, both manual trigger and automatic trigger will be updated according to the tag when the pipeline executes."
         - name: imageRepositoryMode
           schema:
-            type: radio
+            type: string
             values:
               - "choice"
               - "input"
@@ -147,7 +147,7 @@ spec:
           value: "输入"
         - name: deployTag
           schema:
-            type: radio
+            type: string
             values:
               - "alterationTag"
               - "assignTag"
