@@ -62,7 +62,7 @@ spec:
           value: ""
         - name: "syncSourceImageTag"
           schema:
-            type: radio
+            type: string
             values:
               - "alterationTag"
               - "assignTag"
@@ -123,7 +123,7 @@ spec:
       items:
         - name: imageRepositoryMode
           schema:
-            type: radio
+            type: string
             values:
               - "choice"
               - "input"
