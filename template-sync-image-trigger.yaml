@@ -195,5 +195,4 @@ spec:
                 value: "input"
   supportedTriggers:
     - type: imageTrigger
-
     - type: cron
