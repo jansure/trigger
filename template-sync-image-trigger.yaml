@@ -45,7 +45,6 @@ spec:
         en: "Source Image Info"
       items:
         - name: "sourceImageRepository"
-          sourceImageFlag: true
           schema:
             type: string
           binding:
@@ -154,24 +153,24 @@ spec:
                 value: "choice"
         - name: "targetImageRepository"
           schema:
-              type: string
+            type: string
           binding:
-              - alaudaSyncImage.args.targetImageRepository
+            - alaudaSyncImage.args.targetImageRepository
           display:
-              type: string
-              name:
-                zh-CN: "目标镜像仓库地址"
-                en: "Address of target Image repository"
-              description:
-                zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
-                en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
+            type: string
+            name:
+              zh-CN: "目标镜像仓库地址"
+              en: "Address of target Image repository"
+            description:
+              zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
+              en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
           required: false
           value: ""
           relation:
-              - action: show
-                when:
-                  name: imageRepositoryMode
-                  value: "input"
+            - action: show
+              when:
+                name: imageRepositoryMode
+                value: "input"
         - name: "targetCredentialsId"
           schema:
             type: string
@@ -190,13 +189,11 @@ spec:
           required: false
           value: ""
           relation:
-              - action: show
-                when:
-                  name: imageRepositoryMode
-                  value: "input"
+            - action: show
+              when:
+                name: imageRepositoryMode
+                value: "input"
   supportedTriggers:
     - type: imageTrigger
-      enabled: true,
-      sourceImageRepository: sourceImageRepository,
-      sourceImageTag: sourceImageTag
+
     - type: cron
