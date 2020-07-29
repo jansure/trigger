@@ -18,7 +18,8 @@ spec:
     label: tools
     labelMatcher: tools
   options:
-    options: "buildDiscarder(logRotator(numToKeepStr: '200'))"
+    timeout: 10
+    raw: "buildDiscarder(logRotator(numToKeepStr: '200'))"
   stages:
     - name: "DeployService"
       tasks:
@@ -109,24 +110,24 @@ spec:
           value: ""
         - name: imageRepositoryMode
           schema:
-              type: string
-              enum:
-                - "choice"
-                - "input"
+            type: string
+            enum:
+              - "choice"
+              - "input"
           binding:
-              - deployService.args.imageRepositoryMode
+            - deployService.args.imageRepositoryMode
           display:
-              type: radio
-              advanced: false
-              name:
-                zh-CN: "方式"
-                en: "Source Image Mode"
-              enumAlias:
-                - "选择"
-                - "输入"
-              description:
-                zh-CN: "镜像仓库地址输入方式。例：选择"
-                en: "Source Image Repository Mode."
+            type: radio
+            advanced: false
+            name:
+              zh-CN: "方式"
+              en: "Source Image Mode"
+            enumAlias:
+              - "选择"
+              - "输入"
+            description:
+              zh-CN: "镜像仓库地址输入方式。例：选择"
+              en: "Source Image Repository Mode."
           required: true
           default: "choice"
           value: "输入"
@@ -152,28 +153,28 @@ spec:
                 value: "choice"
         - name: "imageRepositoryDeploy"
           schema:
-                  type: string
+            type: string
           binding:
-                  - deployService.args.imageRepositoryDeploy
+            - deployService.args.imageRepositoryDeploy
           required: true
           value: ""
           display:
-                  type: string
-                  name:
-                    zh-CN: "镜像仓库"
-                    en: Repository
-                  description:
-                    zh-CN: "镜像仓库tag值为${imageTag}时，手动触动，将按照执行时弹框输入的tag进行更新，自动触发，将按照tag为latest进行更新；tag值不为${imageTag}时，流水线执行时，手动触发和自动触发都按照该tag进行更新"
-                    en: "When the tag value of the image repository is ${imageTag}, it will be manually triggered, and it will be updated according to the tag entered in the pop-up box during execution. It will be automatically triggered, and the latest will be updated according to tag. When the tag value is not ${imageTag}, both manual trigger and automatic trigger will be updated according to the tag when the pipeline executes."
+            type: string
+            name:
+              zh-CN: "镜像仓库"
+              en: Repository
+            description:
+              zh-CN: "镜像仓库tag值为${imageTag}时，手动触动，将按照执行时弹框输入的tag进行更新，自动触发，将按照tag为latest进行更新；tag值不为${imageTag}时，流水线执行时，手动触发和自动触发都按照该tag进行更新"
+              en: "When the tag value of the image repository is ${imageTag}, it will be manually triggered, and it will be updated according to the tag entered in the pop-up box during execution. It will be automatically triggered, and the latest will be updated according to tag. When the tag value is not ${imageTag}, both manual trigger and automatic trigger will be updated according to the tag when the pipeline executes."
           relation:
-                  - action: show
-                    when:
-                      name: imageRepositoryMode
-                      value: "input"
+            - action: show
+              when:
+                name: imageRepositoryMode
+                value: "input"
         - name: deployTag
           schema:
             type: string
-            values:
+            enum:
               - "alterationTag"
               - "assignTag"
           binding:
@@ -184,7 +185,7 @@ spec:
             name:
               zh-CN: "更新标签"
               en: "Sync Source Image Tag"
-            values:
+            enumAlias:
               - "更新变动标签"
               - "更新指定标签"
             description:
@@ -195,41 +196,41 @@ spec:
           value: "应用变动标签"
         - name: "sourceImageTag"
           schema:
-              type: string
+            type: string
           binding:
-              - alaudaSyncImage.args.sourceImageTag
+            - alaudaSyncImage.args.sourceImageTag
           display:
-              type: string
-              advanced: false
-              name:
-                zh-CN: "更新标签"
-                en: "Update image tag"
-              description:
-                zh-CN: "更新应用的版本。例：latest"
-                en: "When synchronizing the apps, enter the version of the apps, for example, latest."
+            type: string
+            advanced: false
+            name:
+              zh-CN: "更新标签"
+              en: "Update image tag"
+            description:
+              zh-CN: "更新应用的版本。例：latest"
+              en: "When synchronizing the apps, enter the version of the apps, for example, latest."
           required: false
           default: ${imageTag}
           value: ""
           relation:
-              - action: show
-                when:
-                  name: deployTag
-                  value: "assignTag"
+            - action: show
+              when:
+                name: deployTag
+                value: "assignTag"
         - name: "sourceCredentialsId"
           schema:
-              type: string
+            type: string
           binding:
-              - alaudaSyncImage.args.sourceCredentialsId
+            - alaudaSyncImage.args.sourceCredentialsId
           display:
-              type: alauda.io/jenkinscredentials
-              args:
-                type: kubernetes.io/dockerconfigjson
-              name:
-                zh-CN: "凭据"
-                en: "Credentials"
-          description:
-                zh-CN: "更新应用时需要拉取镜像所使用的凭据"
-                en: "Source Image Repository Credentials"
+            type: alauda.io/jenkinscredentials
+            args:
+              type: kubernetes.io/dockerconfigjson
+            name:
+              zh-CN: "凭据"
+              en: "Credentials"
+            description:
+              zh-CN: "更新应用时需要拉取镜像所使用的凭据"
+              en: "Source Image Repository Credentials"
           required: false
           value: ""
           relation:
@@ -338,7 +339,4 @@ spec:
                 value: true
   supportedTriggers:
     - type: imageTrigger
-      enabled: true,
-      sourceImageRepository: sourceImageRepository,
-      sourceImageTag: "sourceImageTag"
     - type: cron
