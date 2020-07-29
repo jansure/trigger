@@ -194,43 +194,6 @@ spec:
                 when:
                   name: imageRepositoryMode
                   value: "input"
-    - displayName:
-        zh-CN: "通知"
-        en: "Notification"
-      items:
-        - name: "UseNotification"
-          schema:
-            type: boolean
-          display:
-            type: boolean
-            name:
-              zh-CN: "开启通知"
-              en: "Use Notification"
-            description:
-              zh-CN: "开启后，可选择已创建好的通知，当流水线执行完成后，会根据通知设置发送通知。"
-              en: "After opening, you can choose the created notification. When the pipeline is completed, the notification will be sent according to the notification settings."
-          required: false
-          value: "false"
-        - name: "PlatformNotification"
-          schema:
-            type: alauda.io/notificationmix
-          required: true
-          binding:
-            - notification.args.PlatformNotification
-          value: ""
-          display:
-            type: alauda.io/notificationmix
-            name:
-              zh-CN: "通知"
-              en: Notification
-            description:
-              zh-CN: "选择已创建好的通知（由管理员创建），将根据选择对流水线进行通知。"
-              en: "Select the created notification (created by the administrator), and the pipeline will be notified according to the selection."
-          relation:
-            - action: show
-              when:
-                name: UseNotification
-                value: true
   supportedTriggers:
     - type: imageTrigger
       enabled: true,
