@@ -81,7 +81,7 @@ spec:
               en: "Switch synchronized source image tag,for example \"sync alteration tag\"."
           required: true
           default: "alterationTag"
-          value: "同步变动标签"
+          value: "alterationTag"
         - name: "sourceImageTag"
           schema:
             type: string
@@ -130,7 +130,7 @@ spec:
               en: "Target Image Repository Mode."
           required: true
           default: "choice"
-          value: "选择"
+          value: "choice"
         - name: "targetImageRepositoryList"
           schema:
             type: imageRepositoryList
