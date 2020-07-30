@@ -133,11 +133,11 @@ spec:
           value: "选择"
         - name: "targetImageRepositoryList"
           schema:
-            type: imageRepositoryList
+            type: string
           binding:
             - alaudaSyncImage.args.targetImageRepositoryList
           display:
-            type: imageRepositoryList
+            type: string
             name:
               zh-CN: "目标镜像仓库地址"
               en: "Address of target Image repository"
