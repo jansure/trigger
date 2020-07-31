@@ -7,7 +7,7 @@ metadata:
     displayName.en: "Trigger Update Application"
     description.zh-CN: "触发器更新应用"
     description.en: "Trigger Update Application"
-    version: "2.11.6"
+    version: "2.11.7"
     style.icon: kubernetes
   labels:
     category: DeployService
