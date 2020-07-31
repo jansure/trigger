@@ -130,7 +130,7 @@ spec:
               en: "Source Image Repository Mode."
           required: true
           default: "choice"
-          value: "输入"
+          value: "choice"
         - name: "imageDestRepository"
           schema:
             type: imageRepositoryList
@@ -193,7 +193,7 @@ spec:
               en: "Switch update service tag,for example \"update alteration tag\"."
           required: true
           default: "alterationTag"
-          value: "应用变动标签"
+          value: "alterationTag"
         - name: "sourceImageTag"
           schema:
             type: string
