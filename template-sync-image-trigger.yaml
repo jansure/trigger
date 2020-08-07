@@ -133,7 +133,7 @@ spec:
           value: "choice"
         - name: "targetImageRepositoryList"
           schema:
-            type: imageRepositoryList
+            type: string
           binding:
             - alaudaSyncImage.args.targetImageRepositoryList
           display:
