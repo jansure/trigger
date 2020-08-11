@@ -130,7 +130,7 @@ spec:
           en: "Source Credentials"
       required: false
     # target
-    - name: "targetImageRepositoryxxx"
+    - name: "targetImageRepository"
       schema:
         type: string
       display:
