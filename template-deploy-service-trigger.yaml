@@ -339,4 +339,7 @@ spec:
                 value: true
   supportedTriggers:
     - type: imageTrigger
+      enable: true
+      sourceImageRepository: sourceImageRepository
+      sourceImageTag: sourceImageTag
     - type: cron
