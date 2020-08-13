@@ -9,7 +9,7 @@ metadata:
     description.en: Deploy Application
     readme.zh-CN: 部署应用
     readme.en: Deploy Application
-    version: "4.0.7"
+    version: "4.0.8"
   labels:
     category: CD
 spec:
@@ -402,7 +402,7 @@ spec:
 
                      p.spec.template.metadata.labels['BUILD_ID']=env.BUILD_ID
                      p.spec.template.metadata.labels['JOB_BASE_NAME']=env.JOB_BASE_NAME
-                     if(repositoryCredentialId != "")
+                     if(repositoryCredentialId != "") {
                       if(credentialCopy != null && shouldUpdate) {
                         alaudaDevops.apply(credentialCopy, "--validate=false")
                       }
