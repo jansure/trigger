@@ -131,11 +131,11 @@ spec:
           required: true
           default: "choice"
           value: "choice"
-        - name: "imageRepositoryDeploy"
+        - name: "imageRepositoryDeployChoice"
           schema:
             type: alauda.io/dockerimagerepositorypullmix
           binding:
-            - deployService.args.imageRepositoryDeploy
+            - deployService.args.imageRepositoryDeployChoice
           required: true
           value: ""
           display:
@@ -151,11 +151,11 @@ spec:
               when:
                 name: imageRepositoryMode
                 value: "choice"
-        - name: "imageRepositoryDeploy"
+        - name: "imageRepositoryDeployInput"
           schema:
             type: alauda.io/dockerimagerepositorypullmix
           binding:
-            - deployService.args.imageRepositoryDeploy
+            - deployService.args.imageRepositoryDeployInput
           required: true
           value: ""
           display:
