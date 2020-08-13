@@ -594,17 +594,17 @@ spec:
           zh-CN: "选择或者输入镜像仓库"
           en: "image repo"
     - name: "imageRepositoryDeployInput"
-        schema:
-          type: alauda.io/dockerimagerepositorypullmix
-        required: true
-        display:
-          type: alauda.io/dockerimagerepositorypullmix
-          name:
-            zh-CN: "镜像仓库"
-            en: Repository
-          description:
-            zh-CN: "选择或者输入镜像仓库"
-            en: "image repo"
+      schema:
+        type: alauda.io/dockerimagerepositorypullmix
+      required: true
+      display:
+        type: alauda.io/dockerimagerepositorypullmix
+        name:
+          zh-CN: "镜像仓库"
+          en: Repository
+        description:
+          zh-CN: "选择或者输入镜像仓库"
+          en: "image repo"
     - name: "rollback"
       schema:
         type: boolean
