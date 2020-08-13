@@ -9,7 +9,7 @@ metadata:
     description.en: Deploy Application
     readme.zh-CN: 部署应用
     readme.en: Deploy Application
-    version: "4.0.3"
+    version: "4.0.6"
   labels:
     category: CD
 spec:
@@ -39,18 +39,18 @@ spec:
         def repositoryTag = ""
         def repositoryCredentialId = ""
         def secretNamespace = ""
-        if ("{{.imageRepositoryMode}}" == "choice") {
+
+        {{if eq .imageRepositoryMode "choice"}}
           repositoryPath = "{{.imageRepositoryDeployChoice.repositoryPath}}"
           repositoryTag = "{{.imageRepositoryDeployChoice.tag}}"
           repositoryCredentialId = "{{.imageRepositoryDeployChoice.credentialId}}"
           secretNamespace = "{{.imageRepositoryDeployChoice.secretNamespace}}"
-        }
-        if ("{{.imageRepositoryMode}}" == "input") {
+        {{end}}
+        {{if eq .imageRepositoryMode  "input"}}
           repositoryPath = "{{.imageRepositoryDeployInput}}"
           repositoryTag = "{{.sourceImageTag}}"
           repositoryCredentialId = "{{.sourceCredentialId}}"
-          secretNamespace = "{{.secretNamespace}}"
-        }
+        {{end}}
 
         newImage['name'] = repositoryPath
         if(repositoryTag == "")
@@ -591,6 +591,11 @@ spec:
         description:
           zh-CN: "选择或者输入镜像仓库"
           en: "image repo"
+      relation:
+        - action: show
+          when:
+            name: imageRepositoryMode
+            value: "choice"
     - name: "imageRepositoryDeployInput"
       schema:
         type: string
@@ -603,11 +608,14 @@ spec:
         description:
           zh-CN: "选择或者输入镜像仓库"
           en: "image repo"
+      relation:
+        - action: show
+          when:
+            name: imageRepositoryMode
+            value: "input"
     - name: "sourceImageTag"
       schema:
         type: string
-      binding:
-        - deployService.args.sourceImageTag
       display:
         type: string
         advanced: false
@@ -623,8 +631,6 @@ spec:
     - name: "sourceCredentialId"
       schema:
         type: string
-      binding:
-        - deployService.args.sourceCredentialId
       display:
         type: alauda.io/jenkinscredentials
         args:
