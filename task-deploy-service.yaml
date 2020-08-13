@@ -9,7 +9,7 @@ metadata:
     description.en: Deploy Application
     readme.zh-CN: 部署应用
     readme.en: Deploy Application
-    version: "4.0.1"
+    version: "4.0.2"
   labels:
     category: CD
 spec:
@@ -54,7 +54,6 @@ spec:
         }
 
         newImage['name'] = repositoryPath
-        {{- if eq repositoryTag "" }}
         if(repositoryTag == "")
           newImage['tag'] = 'latest'
         else {
