@@ -559,28 +559,28 @@ spec:
             name: createApp
             value: true
     - name: imageRepositoryMode
-        schema:
-          type: string
-          enum:
-            - "choice"
-            - "input"
-        binding:
-          - deployService.args.imageRepositoryMode
-        display:
-          type: radio
-          advanced: false
-          name:
-            zh-CN: "方式"
-            en: "Source Image Mode"
-          enumAlias:
-            - "选择"
-            - "输入"
-          description:
-            zh-CN: "镜像仓库地址输入方式。例：选择"
-            en: "Source Image Repository Mode."
-        required: true
-        default: "choice"
-        value: "choice"
+      schema:
+        type: string
+        enum:
+          - "choice"
+          - "input"
+      binding:
+        - deployService.args.imageRepositoryMode
+      display:
+        type: radio
+        advanced: false
+        name:
+          zh-CN: "方式"
+          en: "Source Image Mode"
+        enumAlias:
+          - "选择"
+          - "输入"
+        description:
+          zh-CN: "镜像仓库地址输入方式。例：选择"
+          en: "Source Image Repository Mode."
+      required: true
+      default: "choice"
+      value: "choice"
     - name: "imageRepositoryDeployChoice"
       schema:
         type: alauda.io/dockerimagerepositorypullmix
