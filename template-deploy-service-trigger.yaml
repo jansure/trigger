@@ -7,7 +7,7 @@ metadata:
     displayName.en: "Trigger Update Application"
     description.zh-CN: "触发器更新应用"
     description.en: "Trigger Update Application"
-    version: "2.11.7"
+    version: "2.11.11"
     style.icon: kubernetes
   labels:
     category: DeployService
@@ -131,15 +131,15 @@ spec:
           required: true
           default: "choice"
           value: "choice"
-        - name: "imageDestRepository"
+        - name: "imageRepositoryDeploy"
           schema:
-            type: imageRepositoryList
+            type: alauda.io/dockerimagerepositorypullmix
           binding:
-            - deployService.args.imageDestRepository
+            - deployService.args.imageRepositoryDeploy
           required: true
           value: ""
           display:
-            type: imageRepositoryList
+            type: alauda.io/dockerimagerepositorypullmix
             name:
               zh-CN: "镜像仓库"
               en: Repository
@@ -153,13 +153,13 @@ spec:
                 value: "choice"
         - name: "imageRepositoryDeploy"
           schema:
-            type: string
+            type: alauda.io/dockerimagerepositorypullmix
           binding:
             - deployService.args.imageRepositoryDeploy
           required: true
           value: ""
           display:
-            type: string
+            type: alauda.io/dockerimagerepositorypullmix
             name:
               zh-CN: "镜像仓库"
               en: Repository
