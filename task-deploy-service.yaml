@@ -9,7 +9,7 @@ metadata:
     description.en: Deploy Application
     readme.zh-CN: 部署应用
     readme.en: Deploy Application
-    version: "4.0.6"
+    version: "4.0.7"
   labels:
     category: CD
 spec:
@@ -53,8 +53,9 @@ spec:
         {{end}}
 
         newImage['name'] = repositoryPath
-        if(repositoryTag == "")
+        if(repositoryTag == "") {
           newImage['tag'] = 'latest'
+        }
         else {
           def tagwithcomma = repositoryTag
           def tags = tagwithcomma.split(",")
