@@ -604,22 +604,22 @@ spec:
           zh-CN: "选择或者输入镜像仓库"
           en: "image repo"
     - name: "sourceImageTag"
-        schema:
-          type: string
-        binding:
-          - deployService.args.sourceImageTag
-        display:
-          type: string
-          advanced: false
-          name:
-            zh-CN: "更新标签"
-            en: "Update image tag"
-          description:
-            zh-CN: "更新应用的版本。例：latest"
-            en: "When synchronizing the apps, enter the version of the apps, for example, latest."
-        required: false
-        default: ${imageTag}
-        value: ""
+      schema:
+        type: string
+      binding:
+        - deployService.args.sourceImageTag
+      display:
+        type: string
+        advanced: false
+        name:
+          zh-CN: "更新标签"
+          en: "Update image tag"
+        description:
+          zh-CN: "更新应用的版本。例：latest"
+          en: "When synchronizing the apps, enter the version of the apps, for example, latest."
+      required: false
+      default: ${imageTag}
+      value: ""
     - name: "sourceCredentialId"
         schema:
           type: string
