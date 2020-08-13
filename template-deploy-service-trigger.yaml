@@ -7,7 +7,7 @@ metadata:
     displayName.en: "Trigger Update Application"
     description.zh-CN: "触发器更新应用"
     description.en: "Trigger Update Application"
-    version: "2.11.15"
+    version: "2.11.17"
     style.icon: kubernetes
   labels:
     category: DeployService
@@ -153,13 +153,13 @@ spec:
                 value: "choice"
         - name: "imageRepositoryDeployInput"
           schema:
-            type: imageRepositoryList
+            type: string
           binding:
             - deployService.args.imageRepositoryDeployInput
           required: true
           value: ""
           display:
-            type: imageRepositoryList
+            type: string
             name:
               zh-CN: "镜像仓库"
               en: Repository
@@ -198,7 +198,7 @@ spec:
           schema:
             type: string
           binding:
-            - alaudaSyncImage.args.sourceImageTag
+            - deployService.args.sourceImageTag
           display:
             type: string
             advanced: false
@@ -220,7 +220,7 @@ spec:
           schema:
             type: string
           binding:
-            - alaudaSyncImage.args.sourceCredentialsId
+            - deployService.args.sourceCredentialsId
           display:
             type: alauda.io/jenkinscredentials
             args:
@@ -236,8 +236,8 @@ spec:
           relation:
             - action: show
               when:
-                name: deployTag
-                value: "assignTag"
+                name: imageRepositoryMode
+                value: "input"
         - name: "rollback"
           schema:
             type: boolean
