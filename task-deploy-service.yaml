@@ -9,7 +9,7 @@ metadata:
     description.en: Deploy Application
     readme.zh-CN: 部署应用
     readme.en: Deploy Application
-    version: "4.0.0"
+    version: "4.0.1"
   labels:
     category: CD
 spec:
