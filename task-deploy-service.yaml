@@ -9,7 +9,7 @@ metadata:
     description.en: Deploy Application
     readme.zh-CN: 部署应用
     readme.en: Deploy Application
-    version: "4.0.2"
+    version: "4.0.3"
   labels:
     category: CD
 spec:
@@ -46,11 +46,10 @@ spec:
           secretNamespace = "{{.imageRepositoryDeployChoice.secretNamespace}}"
         }
         if ("{{.imageRepositoryMode}}" == "input") {
-          repositoryPath = "{{.imageRepositoryDeployInput.repositoryPath}}"
-          repositoryTag = "{{.imageRepositoryDeployInput.tag}}"
-          repositoryCredentialId = "{{.imageRepositoryDeployInput.credentialId}}"
-          secretNamespace = "{{.imageRepositoryDeployInput.secretNamespace}}"
-
+          repositoryPath = "{{.imageRepositoryDeployInput}}"
+          repositoryTag = "{{.sourceImageTag}}"
+          repositoryCredentialId = "{{.sourceCredentialId}}"
+          secretNamespace = "{{.secretNamespace}}"
         }
 
         newImage['name'] = repositoryPath
@@ -66,7 +65,7 @@ spec:
 
         if (repositoryCredentialId != "") {
           env.CREDENTIAL_ID = repositoryCredentialId
-          if(secretNamespace != null) {
+          if(secretNamespace != "") {
             env.CREDENTIAL_ID = env.CREDENTIAL_ID.replaceFirst("{{.}}-","")
             try{
               credentialCopy = alaudaDevops.withCluster(){
@@ -582,10 +581,10 @@ spec:
       value: "choice"
     - name: "imageRepositoryDeployChoice"
       schema:
-        type: alauda.io/dockerimagerepositorypullmix
+        type: imageRepositoryList
       required: true
       display:
-        type: alauda.io/dockerimagerepositorypullmix
+        type: imageRepositoryList
         name:
           zh-CN: "镜像仓库"
           en: Repository
@@ -594,16 +593,50 @@ spec:
           en: "image repo"
     - name: "imageRepositoryDeployInput"
       schema:
-        type: alauda.io/dockerimagerepositorypullmix
+        type: string
       required: true
       display:
-        type: alauda.io/dockerimagerepositorypullmix
+        type: string
         name:
           zh-CN: "镜像仓库"
           en: Repository
         description:
           zh-CN: "选择或者输入镜像仓库"
           en: "image repo"
+    - name: "sourceImageTag"
+        schema:
+          type: string
+        binding:
+          - deployService.args.sourceImageTag
+        display:
+          type: string
+          advanced: false
+          name:
+            zh-CN: "更新标签"
+            en: "Update image tag"
+          description:
+            zh-CN: "更新应用的版本。例：latest"
+            en: "When synchronizing the apps, enter the version of the apps, for example, latest."
+        required: false
+        default: ${imageTag}
+        value: ""
+    - name: "sourceCredentialId"
+        schema:
+          type: string
+        binding:
+          - deployService.args.sourceCredentialId
+        display:
+          type: alauda.io/jenkinscredentials
+          args:
+            type: kubernetes.io/dockerconfigjson
+          name:
+            zh-CN: "凭据"
+            en: "Credentials"
+          description:
+            zh-CN: "更新应用时需要拉取镜像所使用的凭据"
+            en: "Source Image Repository Credentials"
+        required: false
+        value: ""
     - name: "rollback"
       schema:
         type: boolean
