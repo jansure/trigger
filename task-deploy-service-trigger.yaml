@@ -9,7 +9,7 @@ metadata:
     description.en: Deploy Application Trigger
     readme.zh-CN: 应用部署触发器
     readme.en: Deploy Application Trigger
-    version: "4.0.10"
+    version: "4.0.12"
   labels:
     category: CD
 spec:
