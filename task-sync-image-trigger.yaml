@@ -7,7 +7,7 @@ metadata:
     displayName.en: SyncImage
     description.zh-CN: 同步镜像模板。将一个镜像从源仓库同步到目标仓库。若源镜像或目标镜像仓库为私有仓库（内网地址），需确保 Jenkins 服务与其在同一网络环境内，方可使用。
     description.en: Sync image template. Synchronize a Image tag from the source repository to the target repository. If the source image or target image repository is a private repository (intranet address), ensure that Jenkins services are available in the same network.
-    version: "3.12.7"
+    version: "3.12.8"
   labels:
     category: SyncImage
 spec:
@@ -15,204 +15,239 @@ spec:
   body: |+
     script{
         container('tools'){
-            def Image = "{{.sourceImageRepository}}:{{.sourceImageTag}}"
-            def sync_image = Image as String
-            def sourceCredentials = "{{.sourceCredentialsId}}"
+            // get source image info
+            def Image = "{{.sourceImageRepository.repositoryPath}}:{{.sourceImageTag}}"
+            def sourceCredentialsId = "{{.sourceImageRepository.credentialId}}"
+            def sourceSecretNamespace = "{{.sourceImageRepository.secretNamespace}}"
+            def sourceSecretName = "{{.sourceImageRepository.secretName}}"
+
+            //get target image info
             def TargetImage = "{{.targetImageRepository}}:{{.sourceImageTag}}"
+            def targetCredentialsId = "{{.targetCredentialsId}}".replaceAll("/","-")
+            def targetSecretNamespace = "{{.targetCredentialsId}}".substring(0,"{{.targetCredentialsId}}".lastIndexOf("/"))
+            def targetSecretName = "{{.targetCredentialsId}}".substring("{{.targetCredentialsId}}".lastIndexOf("/")+1)
             if ("{{.imageRepositoryMode}}" == "choice") {
-                Image = "{{.sourceImageRepository.repositoryPath}}:{{.sourceImageTag}}"
                 TargetImage = "{{.targetImageRepositoryList.repositoryPath}}:{{.sourceImageTag}}"
+                targetCredentialsId = "{{.targetImageRepositoryList.credentialId}}"
+                targetSecretNamespace = "{{.targetImageRepositoryList.secretNamespace}}"
+                targetSecretName = "{{.targetImageRepositoryList.secretName}}"
             }
-            def sync_target = TargetImage as String
-            def targetCredentials = "{{.targetCredentialsId}}"
 
-
-            {{- if .sourceCredentialsId}}
-            try{
-              def realCredentialId = sourceCredentials.replaceAll("/","-")
-              withCredentials([usernamePassword(credentialsId: realCredentialId, usernameVariable: "USERNAME", passwordVariable: "PASSWORD")]){
-                  sh "docker login ${Image} -u ${USERNAME} -p ${PASSWORD}"
+            // login to source docker registry
+            if (sourceCredentialsId != ""){
+              try{
+                withCredentials([usernamePassword(credentialsId: sourceCredentialsId, usernameVariable: "USERNAME", passwordVariable: "PASSWORD")]){
+                    sh "docker login ${Image} -u ${USERNAME} -p ${PASSWORD}"
+                }
+              }
+              catch(err){
+                  echo err.getMessage()
+                  alaudaDevops.withCluster() {
+                      def secret = alaudaDevops.selector( "secret/${sourceSecretName}" )
+                      alaudaDevops.withProject( "${sourceSecretNamespace}" ) {
+                          def secretjson = secret.object().data['.dockerconfigjson']
+                          def dockerconfigjson = base64Decode("${secretjson}");
+                          writeFile file: 'config.json', text: dockerconfigjson
+                          sh """
+                            set +x
+                            mkdir -p ~/.docker
+                            mv -f config.json ~/.docker/config.json
+                          """
+                      }
+                  }
               }
             }
-            catch(err){
-                echo err.getMessage()
-                alaudaDevops.withCluster() {
-                    def secretNamespace = sourceCredentials.substring(0,sourceCredentials.lastIndexOf("/"))
-                    def secretName = sourceCredentials.substring(sourceCredentials.lastIndexOf("/")+1)
-                    def secret = alaudaDevops.selector( "secret/${secretName}" )
-                    alaudaDevops.withProject( "${secretNamespace}" ) {
-                        def secretjson = secret.object().data['.dockerconfigjson']
-                        def dockerconfigjson = base64Decode("${secretjson}");
-                        writeFile file: 'config.json', text: dockerconfigjson
-                        sh """
-                          set +x
-                          mkdir -p ~/.docker
-                          mv -f config.json ~/.docker/config.json
-                        """
-                        }
-                    }
-                }
-            {{- end}}
+            
             retry(2){
                 sh "docker pull ${Image}"
             }
             sh "docker tag ${Image} ${TargetImage}"
-            {{- if .targetCredentialsId}}
 
-            try{
-                def realCredentialId = targetCredentials.replaceAll("/","-")
-                withCredentials([usernamePassword(credentialsId: realCredentialId, usernameVariable: "TARGETUSERNAME", passwordVariable: "TARGETPASSWORD")]){
-                    sh "docker login ${TargetImage} -u ${TARGETUSERNAME} -p ${TARGETPASSWORD}"
+            // login to target docker registry
+            if (targetCredentialsId != "" ){
+              try{
+                  withCredentials([usernamePassword(credentialsId: targetCredentialsId, usernameVariable: "TARGETUSERNAME", passwordVariable: "TARGETPASSWORD")]){
+                      sh "docker login ${TargetImage} -u ${TARGETUSERNAME} -p ${TARGETPASSWORD}"
+                    }
+                }
+              catch(err){
+                  echo err.getMessage()
+                  alaudaDevops.withCluster() {
+                      def secret = alaudaDevops.selector( "secret/${targetSecretNamespace}" )
+                      alaudaDevops.withProject( "${targetSecretName}" ) {
+                          def secretjson = secret.object().data['.dockerconfigjson']
+                          def dockerconfigjson = base64Decode("${secretjson}");
+                          writeFile file: 'config.json', text: dockerconfigjson
+                          sh """
+                            set +x
+                            mkdir -p ~/.docker
+                            mv -f config.json ~/.docker/config.json
+                          """
+                      }
                   }
               }
-            catch(err){
-                echo err.getMessage()
-                alaudaDevops.withCluster() {
-                    def secretNamespace = targetCredentials.substring(0,targetCredentials.lastIndexOf("/"))
-                    def secretName = targetCredentials.substring(targetCredentials.lastIndexOf("/")+1)
-                    def secret = alaudaDevops.selector( "secret/${secretName}" )
-                    alaudaDevops.withProject( "${secretNamespace}" ) {
-                        def secretjson = secret.object().data['.dockerconfigjson']
-                        def dockerconfigjson = base64Decode("${secretjson}");
-                        writeFile file: 'config.json', text: dockerconfigjson
-                        sh """
-                          set +x
-                          mkdir -p ~/.docker
-                          mv -f config.json ~/.docker/config.json
-                        """
-                        }
-                    }
-              }
-            {{- end}}
+            }
+
             retry(2){
                 sh "docker push ${TargetImage}"
             }
-            alaudaPipeline.appendInfo(STAGE_NAME, [source_image: sync_image, target_image: sync_target], '_Sync')
+            alaudaPipeline.appendInfo(STAGE_NAME, [source_image: Image, target_image: TargetImage], '_Sync')
         }
     }
   arguments:
-    - name: "targetImageRepositoryList"
-      schema:
-        type: imageRepositoryList
-      display:
-        type: imageRepositoryList
-        name:
-          zh-CN: "目标镜像仓库地址"
-          en: "Address of target Image repository"
-        description:
-          zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
-          en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
-      required: true
-      relation:
-        - action: show
-          when:
-            name: imageRepositoryMode
-            value: "choice"
-    - name: imageRepositoryMode
-      schema:
-        type: string
-        enum:
-          - "choice"
-          - "input"
-      display:
-        type: radio
-        advanced: false
-        name:
-          zh-CN: "方式"
-          en: "Source Image Mode"
-        enumAlias:
-          - "选择"
-          - "输入"
-        description:
-          zh-CN: "镜像仓库地址输入方式。例：选择"
-          en: "Target Image Repository Mode."
-      required: true
-      default: "choice"
-    - name: "sourceImageRepository"
-      schema:
-        type: imageRepositoryList
-      display:
-        type: imageRepositoryList
-        name:
-          zh-CN: "源镜像仓库地址"
-          en: "Address of source Image repository"
-        description:
-          zh-CN: "输入镜像仓库。例：index.docker.io/alauda/hello-world"
-          en: "When synchronizing the images, select the source images directly if the images are platform images. If the source images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
-      required: true
-    - name: "sourceImageTag"
-      schema:
-        type: string
-      display:
-        type: string
-        name:
-          zh-CN: "源镜像标签"
-          en: "Source image tag"
-        description:
-          zh-CN: "源镜像的版本。例：latest"
-          en: "When synchronizing the images, enter the version of the source image, for example, latest."
-      required: true
-      default: latest
-    - name: "sourceCredentialsId"
-      schema:
-        type: string
-      display:
-        type: alauda.io/jenkinscredentials
-        args:
-          type: kubernetes.io/dockerconfigjson
-        name:
-          zh-CN: "源镜像凭据"
-          en: "Source Credentials"
-        description:
-          zh-CN: "拉取镜像时，使用的凭据"
-          en: "Source Credentials"
-      required: false
-    # target
-    - name: "targetImageRepository"
-      schema:
-        type: string
-      display:
-        type: string
-        name:
-          zh-CN: "目标镜像仓库地址"
-          en: "Address of target Image repository"
-        description:
-          zh-CN: "输入镜像仓库。例：index.docker.io/alauda/hello-world"
-          en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
-      required: true
-      value: ""
-      relation:
-        - action: show
-          when:
-            name: imageRepositoryMode
-            value: "input"
-    - name: "sourceImageTag"
-      schema:
-        type: string
-      display:
-        type: string
-        name:
-          zh-CN: "目标镜像标签"
-          en: "Target image tag"
-        description:
-          zh-CN: "同步镜像时，生成镜像的标签"
-          en: "When synchronizing the images, enter the version of the target image, for example, latest."
-      required: true
-      default: latest
-    - name: "targetCredentialsId"
-      schema:
-        type: string
-      display:
-        type: alauda.io/jenkinscredentials
-        args:
-          type: kubernetes.io/dockerconfigjson
-        name:
-          zh-CN: "目标镜像凭据"
-          en: "Target Credentials"
-        description:
-          zh-CN: "推送镜像时，使用的凭据"
-          en: "Target Credentials"
-      required: false
+    - displayName:
+        zh-CN: "源镜像信息"
+        en: "Source Image Info"
+      items:
+        - name: "sourceImageRepository"
+          schema:
+            type: imageRepositoryList
+          binding:
+            - alaudaSyncImage.args.sourceImageRepository
+          display:
+            type: imageRepositoryList
+            name:
+              zh-CN: "源镜像仓库地址"
+              en: "Address of source Image repository"
+            description:
+              zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
+              en: "When synchronizing the images, select the source images directly if the images are platform images. If the source images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
+          required: true
+          value: ""
+        - name: "syncSourceImageTag"
+          schema:
+            type: string
+            enum:
+              - "alterationTag"
+              - "assignTag"
+          binding:
+            - alaudaSyncImage.args.syncSourceImageTag
+          display:
+            type: "radio"
+            advanced: false
+            name:
+              zh-CN: "同步源镜像标签"
+              en: "Sync Source Image Tag"
+            enumAlias:
+              - "同步变动标签"
+              - "同步指定标签"
+            description:
+              zh-CN: "同步源镜像标签。例：同步变动标签"
+              en: "Switch synchronized source image tag,for example \"sync alteration tag\"."
+          required: true
+          default: "alterationTag"
+          value: "alterationTag"
+        - name: "sourceImageTag"
+          schema:
+            type: string
+          binding:
+            - alaudaSyncImage.args.sourceImageTag
+          display:
+            type: string
+            advanced: false
+            name:
+              zh-CN: "源镜像标签"
+              en: "Source image tag"
+            description:
+              zh-CN: "源镜像的版本。例：latest"
+              en: "When synchronizing the images, enter the version of the source image, for example, latest."
+          required: true
+          default: ${imageTag}
+          value: ""
+          relation:
+            - action: show
+              when:
+                name: syncSourceImageTag
+                value: "assignTag"
+    - displayName:
+        zh-CN: "目标镜像信息"
+        en: "Target Image Info"
+      items:
+        - name: imageRepositoryMode
+          schema:
+            type: string
+            enum:
+              - "choice"
+              - "input"
+          binding:
+            - alaudaSyncImage.args.imageRepositoryMode
+          display:
+            type: radio
+            advanced: false
+            name:
+              zh-CN: "方式"
+              en: "Source Image Mode"
+            enumAlias:
+              - "选择"
+              - "输入"
+            description:
+              zh-CN: "镜像仓库地址输入方式。例：选择"
+              en: "Target Image Repository Mode."
+          required: true
+          default: "choice"
+          value: "选择"
+        - name: "targetImageRepositoryList"
+          schema:
+            type: imageRepositoryList
+          binding:
+            - alaudaSyncImage.args.targetImageRepositoryList
+          display:
+            type: imageRepositoryList
+            name:
+              zh-CN: "目标镜像仓库地址"
+              en: "Address of target Image repository"
+            description:
+              zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
+              en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
+          required: true
+          value: ""
+          relation:
+            - action: show
+              when:
+                name: imageRepositoryMode
+                value: "choice"
+        - name: "targetImageRepository"
+          schema:
+            type: string
+          binding:
+            - alaudaSyncImage.args.targetImageRepository
+          display:
+            type: string
+            name:
+              zh-CN: "目标镜像仓库地址"
+              en: "Address of target Image repository"
+            description:
+              zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
+              en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
+          required: false
+          value: ""
+          relation:
+            - action: show
+              when:
+                name: imageRepositoryMode
+                value: "input"
+        - name: "targetCredentialsId"
+          schema:
+            type: string
+          binding:
+            - alaudaSyncImage.args.targetCredentialsId
+          display:
+            type: alauda.io/jenkinscredentials
+            args:
+              type: kubernetes.io/dockerconfigjson
+            name:
+              zh-CN: "目标镜像凭据"
+              en: "Target Credentials"
+            description:
+              zh-CN: "推送镜像时，使用的凭据"
+              en: "Target Credentials"
+          required: false
+          value: ""
+          relation:
+            - action: show
+              when:
+                name: imageRepositoryMode
+                value: "input"
   view:
     markdown: |-
       {{ if eq $item.type "_Sync"}}
