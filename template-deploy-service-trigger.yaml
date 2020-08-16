@@ -49,7 +49,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.clusterName
+            - deployServiceTrigger.args.clusterName
           display:
             type: alauda.io/clustername
             name:
@@ -64,7 +64,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.namespace
+            - deployServiceTrigger.args.namespace
           display:
             type: alauda.io/namespace
             name:
@@ -80,7 +80,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.serviceName
+            - deployServiceTrigger.args.serviceName
           display:
             type: alauda.io/servicenamemix
             name:
@@ -96,7 +96,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.containerName
+            - deployServiceTrigger.args.containerName
           display:
             type: alauda.io/containername
             name:
@@ -115,7 +115,7 @@ spec:
               - "choice"
               - "input"
           binding:
-            - deployService.args.imageRepositoryMode
+            - deployServiceTrigger.args.imageRepositoryMode
           display:
             type: radio
             advanced: false
@@ -135,7 +135,7 @@ spec:
           schema:
             type: imageRepositoryList
           binding:
-            - deployService.args.imageRepositoryDeployChoice
+            - deployServiceTrigger.args.imageRepositoryDeployChoice
           required: true
           value: ""
           display:
@@ -155,7 +155,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.imageRepositoryDeployInput
+            - deployServiceTrigger.args.imageRepositoryDeployInput
           required: true
           value: ""
           display:
@@ -178,7 +178,7 @@ spec:
               - "alterationTag"
               - "assignTag"
           binding:
-            - deployService.args.deployTag
+            - deployServiceTrigger.args.deployTag
           display:
             type: radio
             advanced: false
@@ -198,7 +198,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.sourceImageTag
+            - deployServiceTrigger.args.sourceImageTag
           display:
             type: string
             advanced: false
@@ -220,7 +220,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.sourceCredentialId
+            - deployServiceTrigger.args.sourceCredentialId
           display:
             type: alauda.io/jenkinscredentials
             args:
@@ -243,7 +243,7 @@ spec:
             type: boolean
           required: false
           binding:
-            - deployService.args.rollback
+            - deployServiceTrigger.args.rollback
           display:
             type: boolean
             name:
@@ -257,7 +257,7 @@ spec:
             type: string
           required: false
           binding:
-            - deployService.args.command
+            - deployServiceTrigger.args.command
           value: ""
           display:
             type: string
@@ -273,7 +273,7 @@ spec:
             type: string
           required: false
           binding:
-            - deployService.args.args
+            - deployServiceTrigger.args.args
           display:
             type: string
             advanced: false
@@ -287,7 +287,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.timeout
+            - deployServiceTrigger.args.timeout
           display:
             type: string
             advanced: false
