@@ -9,7 +9,7 @@ metadata:
     description.en: Deploy Application Trigger
     readme.zh-CN: 应用部署触发器
     readme.en: Deploy Application Trigger
-    version: "4.0.23"
+    version: "4.0.24"
   labels:
     category: CD
 spec:
@@ -44,7 +44,7 @@ spec:
         // get repository info: path, tag, credentialsId, namespace, name
         {{if eq .imageRepositoryMode "choice"}}
           repositoryPath = "{{.imageRepositoryDeployChoice.repositoryPath}}"
-          repositoryTag = "{{.imageRepositoryDeployChoice.tag}}"
+          repositoryTag = "{{.sourceImageTag}}"
           repositoryCredentialId = "{{.imageRepositoryDeployChoice.credentialId}}"
           secretNamespace = "{{.imageRepositoryDeployChoice.secretNamespace}}"
           secretName = "{{.imageRepositoryDeployChoice.secretName}}"
