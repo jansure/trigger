@@ -172,20 +172,20 @@ spec:
                 name: imageRepositoryMode
                 value: "input"
         - name: "imageRepositoryDeploy"
-            schema:
-              type: alauda.io/dockerimagerepositorypullmix
-            binding:
-              - deployService.args.imageRepositoryDeploy
-            required: true
-            value: ""
-            display:
-              type: alauda.io/dockerimagerepositorypullmix
-              name:
-                zh-CN: "镜像仓库"
-                en: Repository
-              description:
-                zh-CN: "镜像仓库tag值为${imageTag}时，手动触动，将按照执行时弹框输入的tag进行更新，自动触发，将按照tag为latest进行更新；tag值不为${imageTag}时，流水线执行时，手动触发和自动触发都按照该tag进行更新"
-                en: "When the tag value of the image repository is ${imageTag}, it will be manually triggered, and it will be updated according to the tag entered in the pop-up box during execution. It will be automatically triggered, and the latest will be updated according to tag. When the tag value is not ${imageTag}, both manual trigger and automatic trigger will be updated according to the tag when the pipeline executes."
+          schema:
+            type: alauda.io/dockerimagerepositorypullmix
+          binding:
+            - deployService.args.imageRepositoryDeploy
+          required: true
+          value: ""
+          display:
+            type: alauda.io/dockerimagerepositorypullmix
+            name:
+              zh-CN: "镜像仓库"
+              en: Repository
+            description:
+              zh-CN: "镜像仓库tag值为${imageTag}时，手动触动，将按照执行时弹框输入的tag进行更新，自动触发，将按照tag为latest进行更新；tag值不为${imageTag}时，流水线执行时，手动触发和自动触发都按照该tag进行更新"
+              en: "When the tag value of the image repository is ${imageTag}, it will be manually triggered, and it will be updated according to the tag entered in the pop-up box during execution. It will be automatically triggered, and the latest will be updated according to tag. When the tag value is not ${imageTag}, both manual trigger and automatic trigger will be updated according to the tag when the pipeline executes."
         - name: deployTag
           schema:
             type: string
