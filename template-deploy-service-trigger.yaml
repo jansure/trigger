@@ -7,7 +7,7 @@ metadata:
     displayName.en: "Trigger Update Application"
     description.zh-CN: "触发器更新应用"
     description.en: "Trigger Update Application"
-    version: "2.11.25"
+    version: "2.11.3"
     style.icon: kubernetes
   labels:
     category: DeployService
@@ -49,7 +49,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.clusterName
+            - deployServiceTrigger.args.clusterName
           display:
             type: alauda.io/clustername
             name:
@@ -64,7 +64,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.namespace
+            - deployServiceTrigger.args.namespace
           display:
             type: alauda.io/namespace
             name:
@@ -80,7 +80,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.serviceName
+            - deployServiceTrigger.args.serviceName
           display:
             type: alauda.io/servicenamemix
             name:
@@ -96,7 +96,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.containerName
+            - deployServiceTrigger.args.containerName
           display:
             type: alauda.io/containername
             name:
@@ -243,7 +243,7 @@ spec:
             type: boolean
           required: false
           binding:
-            - deployService.args.rollback
+            - deployServiceTrigger.args.rollback
           display:
             type: boolean
             name:
@@ -287,7 +287,7 @@ spec:
           schema:
             type: string
           binding:
-            - deployService.args.timeout
+            - deployServiceTrigger.args.timeout
           display:
             type: string
             advanced: false
