@@ -7,7 +7,7 @@ metadata:
     displayName.en: SyncImage
     description.zh-CN: 同步镜像模板。将一个镜像从源仓库同步到目标仓库。若源镜像或目标镜像仓库为私有仓库（内网地址），需确保 Jenkins 服务与其在同一网络环境内，方可使用。
     description.en: Sync image template. Synchronize a Image tag from the source repository to the target repository. If the source image or target image repository is a private repository (intranet address), ensure that Jenkins services are available in the same network.
-    version: "3.12.5"
+    version: "3.12.6"
   labels:
     category: SyncImage
 spec:
@@ -15,11 +15,12 @@ spec:
   body: |+
     script{
         container('tools'){
-            def Image = "{{.sourceImageRepository.repositoryPath}}:{{.sourceImageTag}}"
+            def Image = "{{.sourceImageRepository}}:{{.sourceImageTag}}"
             def sync_image = Image as String
             def sourceCredentials = "{{.sourceCredentialsId}}"
             def TargetImage = "{{.targetImageRepository}}:{{.sourceImageTag}}"
             if ("{{.imageRepositoryMode}}" == "choice") {
+                Image = "{{.sourceImageRepository.repositoryPath}}:{{.sourceImageTag}}"
                 TargetImage = "{{.targetImageRepositoryList.repositoryPath}}:{{.sourceImageTag}}"
             }
             def sync_target = TargetImage as String
