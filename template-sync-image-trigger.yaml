@@ -7,7 +7,7 @@ metadata:
     displayName.en: Trigger Sync Image
     description.zh-CN: 触发器同步镜像模板。触发器接收到源镜像仓库变更，就将一个镜像从源仓库同步到目标仓库。若源镜像或目标镜像仓库为私有仓库（内网地址），需确保 Jenkins 服务与其在同一网络环境内，方可使用。
     description.en: Trigger Sync image template. When trigger receive a alteration，then synchronize a Image tag from the source repository to the target repository. If the source image or target image repository is a private repository (intranet address), ensure that Jenkins services are available in the same network.
-    version: "3.0.15"
+    version: "3.0.16"
     style.icon: docker
   labels:
     category: SyncImage
