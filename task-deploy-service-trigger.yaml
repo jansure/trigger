@@ -9,7 +9,7 @@ metadata:
     description.en: Deploy Application Trigger
     readme.zh-CN: 应用部署触发器
     readme.en: Deploy Application Trigger
-    version: "4.0.22"
+    version: "4.0.23"
   labels:
     category: CD
 spec:
@@ -39,17 +39,25 @@ spec:
         def repositoryTag = ""
         def repositoryCredentialId = ""
         def secretNamespace = ""
+        def secretName = ""
 
+        // get repository info: path, tag, credentialsId, namespace, name
         {{if eq .imageRepositoryMode "choice"}}
           repositoryPath = "{{.imageRepositoryDeployChoice.repositoryPath}}"
           repositoryTag = "{{.imageRepositoryDeployChoice.tag}}"
           repositoryCredentialId = "{{.imageRepositoryDeployChoice.credentialId}}"
           secretNamespace = "{{.imageRepositoryDeployChoice.secretNamespace}}"
+          secretName = "{{.imageRepositoryDeployChoice.secretName}}"
         {{end}}
         {{if eq .imageRepositoryMode  "input"}}
           repositoryPath = "{{.imageRepositoryDeployInput}}"
           repositoryTag = "{{.sourceImageTag}}"
           repositoryCredentialId = "{{.sourceCredentialId}}"
+          if(repositoryCredentialId != "") {
+            secretNamespace = repositoryCredentialId.substring(0,repositoryCredentialId.lastIndexOf("/"))
+            secretName = repositoryCredentialId.substring(repositoryCredentialId.lastIndexOf("/")+1)
+            repositoryCredentialId = "{{.sourceCredentialId}}".replaceAll("/","-")
+          }
         {{end}}
 
         newImage['name'] = repositoryPath
@@ -67,15 +75,14 @@ spec:
         if (repositoryCredentialId != "") {
           env.CREDENTIAL_ID = repositoryCredentialId
           if(secretNamespace != "") {
-            env.CREDENTIAL_ID = env.CREDENTIAL_ID.replaceFirst("{{.}}-","")
             try{
               credentialCopy = alaudaDevops.withCluster(){
-                alaudaDevops.withProject("{{.}}") {
-                alaudaDevops.selector('secret', env.CREDENTIAL_ID).object()
+                alaudaDevops.withProject(secretNamespace) {
+                  alaudaDevops.selector('secret', env.CREDENTIAL_ID).object()
+                }
               }
-            }
-            credentialCopy.namespace = "{{.}}"
-            credentialCopy.name = env.CREDENTIAL_ID
+              credentialCopy.namespace = secretNamespace
+              credentialCopy.name = env.CREDENTIAL_ID
             } catch(err) {
               error err.getMessage()
             }
