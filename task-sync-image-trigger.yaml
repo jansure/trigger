@@ -110,136 +110,136 @@ spec:
         en: "When synchronizing the images, select the source images directly if the images are platform images. If the source images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
     required: true
     value: ""
-    - name: "syncSourceImageTag"
+  - name: "syncSourceImageTag"
+    schema:
+      type: string
+      enum:
+        - "alterationTag"
+        - "assignTag"
+    binding:
+      - alaudaSyncImage.args.syncSourceImageTag
+    display:
+      type: "radio"
+      advanced: false
+      name:
+        zh-CN: "同步源镜像标签"
+        en: "Sync Source Image Tag"
+      enumAlias:
+        - "同步变动标签"
+        - "同步指定标签"
+      description:
+        zh-CN: "同步源镜像标签。例：同步变动标签"
+        en: "Switch synchronized source image tag,for example \"sync alteration tag\"."
+    required: true
+    default: "alterationTag"
+    value: "alterationTag"
+  - name: "sourceImageTag"
       schema:
         type: string
-        enum:
-          - "alterationTag"
-          - "assignTag"
       binding:
-        - alaudaSyncImage.args.syncSourceImageTag
+        - alaudaSyncImage.args.sourceImageTag
       display:
-        type: "radio"
+        type: string
         advanced: false
         name:
-          zh-CN: "同步源镜像标签"
-          en: "Sync Source Image Tag"
-        enumAlias:
-          - "同步变动标签"
-          - "同步指定标签"
+          zh-CN: "源镜像标签"
+          en: "Source image tag"
         description:
-          zh-CN: "同步源镜像标签。例：同步变动标签"
-          en: "Switch synchronized source image tag,for example \"sync alteration tag\"."
+          zh-CN: "源镜像的版本。例：latest"
+          en: "When synchronizing the images, enter the version of the source image, for example, latest."
       required: true
-      default: "alterationTag"
-      value: "alterationTag"
-    - name: "sourceImageTag"
-        schema:
-          type: string
-        binding:
-          - alaudaSyncImage.args.sourceImageTag
-        display:
-          type: string
-          advanced: false
-          name:
-            zh-CN: "源镜像标签"
-            en: "Source image tag"
-          description:
-            zh-CN: "源镜像的版本。例：latest"
-            en: "When synchronizing the images, enter the version of the source image, for example, latest."
-        required: true
-        default: ${imageTag}
-        value: ""
-        relation:
-          - action: show
-            when:
-              name: syncSourceImageTag
-              value: "assignTag"
-    - name: imageRepositoryMode
-      schema:
-        type: string
-        enum:
-          - "choice"
-          - "input"
-      binding:
-        - alaudaSyncImage.args.imageRepositoryMode
-      display:
-        type: radio
-        advanced: false
-        name:
-          zh-CN: "方式"
-          en: "Source Image Mode"
-        enumAlias:
-          - "选择"
-          - "输入"
-        description:
-          zh-CN: "镜像仓库地址输入方式。例：选择"
-          en: "Target Image Repository Mode."
-      required: true
-      default: "choice"
-      value: "选择"
-    - name: "targetImageRepositoryList"
-      schema:
-        type: imageRepositoryList
-      binding:
-        - alaudaSyncImage.args.targetImageRepositoryList
-      display:
-        type: imageRepositoryList
-        name:
-          zh-CN: "目标镜像仓库地址"
-          en: "Address of target Image repository"
-        description:
-          zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
-          en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
-      required: true
+      default: ${imageTag}
       value: ""
       relation:
         - action: show
           when:
-            name: imageRepositoryMode
-            value: "choice"
-    - name: "targetImageRepository"
-      schema:
-        type: string
-      binding:
-        - alaudaSyncImage.args.targetImageRepository
-      display:
-        type: string
-        name:
-          zh-CN: "目标镜像仓库地址"
-          en: "Address of target Image repository"
-        description:
-          zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
-          en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
-      required: false
-      value: ""
-      relation:
-        - action: show
-          when:
-            name: imageRepositoryMode
-            value: "input"
-    - name: "targetCredentialsId"
-      schema:
-        type: string
-      binding:
-        - alaudaSyncImage.args.targetCredentialsId
-      display:
-        type: alauda.io/jenkinscredentials
-        args:
-          type: kubernetes.io/dockerconfigjson
-        name:
-          zh-CN: "目标镜像凭据"
-          en: "Target Credentials"
-        description:
-          zh-CN: "推送镜像时，使用的凭据"
-          en: "Target Credentials"
-      required: false
-      value: ""
-      relation:
-        - action: show
-          when:
-            name: imageRepositoryMode
-            value: "input"
+            name: syncSourceImageTag
+            value: "assignTag"
+  - name: imageRepositoryMode
+    schema:
+      type: string
+      enum:
+        - "choice"
+        - "input"
+    binding:
+      - alaudaSyncImage.args.imageRepositoryMode
+    display:
+      type: radio
+      advanced: false
+      name:
+        zh-CN: "方式"
+        en: "Source Image Mode"
+      enumAlias:
+        - "选择"
+        - "输入"
+      description:
+        zh-CN: "镜像仓库地址输入方式。例：选择"
+        en: "Target Image Repository Mode."
+    required: true
+    default: "choice"
+    value: "选择"
+  - name: "targetImageRepositoryList"
+    schema:
+      type: imageRepositoryList
+    binding:
+      - alaudaSyncImage.args.targetImageRepositoryList
+    display:
+      type: imageRepositoryList
+      name:
+        zh-CN: "目标镜像仓库地址"
+        en: "Address of target Image repository"
+      description:
+        zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
+        en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
+    required: true
+    value: ""
+    relation:
+      - action: show
+        when:
+          name: imageRepositoryMode
+          value: "choice"
+  - name: "targetImageRepository"
+    schema:
+      type: string
+    binding:
+      - alaudaSyncImage.args.targetImageRepository
+    display:
+      type: string
+      name:
+        zh-CN: "目标镜像仓库地址"
+        en: "Address of target Image repository"
+      description:
+        zh-CN: "选择镜像仓库。例：index.docker.io/alauda/hello-world"
+        en: "When synchronizing the images, select the target images directly if the images are platform images. If the target images are third party images, you must enter the third party repository address, for example, alauda/hello-world"
+    required: false
+    value: ""
+    relation:
+      - action: show
+        when:
+          name: imageRepositoryMode
+          value: "input"
+  - name: "targetCredentialsId"
+    schema:
+      type: string
+    binding:
+      - alaudaSyncImage.args.targetCredentialsId
+    display:
+      type: alauda.io/jenkinscredentials
+      args:
+        type: kubernetes.io/dockerconfigjson
+      name:
+        zh-CN: "目标镜像凭据"
+        en: "Target Credentials"
+      description:
+        zh-CN: "推送镜像时，使用的凭据"
+        en: "Target Credentials"
+    required: false
+    value: ""
+    relation:
+      - action: show
+        when:
+          name: imageRepositoryMode
+          value: "input"
   view:
     markdown: |-
       {{ if eq $item.type "_Sync"}}
