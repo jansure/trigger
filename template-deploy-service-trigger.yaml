@@ -7,7 +7,7 @@ metadata:
     displayName.en: "Trigger Update Application"
     description.zh-CN: "触发器更新应用"
     description.en: "Trigger Update Application"
-    version: "4.11.34"
+    version: "4.11.35"
     style.icon: kubernetes
   labels:
     category: DeployService
@@ -339,9 +339,10 @@ spec:
                 value: true
   supportedTriggers:
     - type: imageTrigger
-      enable: true
-      sourceImageRepository:
-        - imageRepositoryDeployInput
-        - imageRepositoryDeployChoice
-      sourceImageTag: imageTag
+      imageTrigger:
+        enable: true
+        sourceImageRepository:
+          - imageRepositoryDeployInput
+          - imageRepositoryDeployChoice
+        sourceImageTag: imageTag
     - type: cron
