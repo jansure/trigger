@@ -9,7 +9,7 @@ metadata:
     description.en: Deploy Application Trigger
     readme.zh-CN: 应用部署触发器
     readme.en: Deploy Application Trigger
-    version: "4.0.24"
+    version: "4.0.25"
   labels:
     category: CD
 spec:
@@ -73,7 +73,7 @@ spec:
         env.NEW_IMAGE = "${newImage.name}:${newImage.tag}"
 
         if (repositoryCredentialId != "") {
-          env.CREDENTIAL_ID = repositoryCredentialId
+          env.CREDENTIAL_ID = repositoryCredentialId.replaceFirst(secretNamespace+"-","")
           if(secretNamespace != "") {
             try{
               credentialCopy = alaudaDevops.withCluster(){
