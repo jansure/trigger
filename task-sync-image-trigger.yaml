@@ -1,13 +1,13 @@
 apiVersion: devops.alauda.io/v1alpha1
 kind: ClusterPipelineTaskTemplate
 metadata:
-  name: alaudaSyncImage
+  name: alaudaSyncImageTrigger
   annotations:
     displayName.zh-CN: 同步镜像
     displayName.en: SyncImage
     description.zh-CN: 同步镜像模板。将一个镜像从源仓库同步到目标仓库。若源镜像或目标镜像仓库为私有仓库（内网地址），需确保 Jenkins 服务与其在同一网络环境内，方可使用。
     description.en: Sync image template. Synchronize a Image tag from the source repository to the target repository. If the source image or target image repository is a private repository (intranet address), ensure that Jenkins services are available in the same network.
-    version: "3.12.12"
+    version: "4.12.23"
   labels:
     category: SyncImage
 spec:
@@ -23,9 +23,19 @@ spec:
 
             //get target image info
             def TargetImage = "{{.targetImageRepository}}:{{.sourceImageTag}}"
-            def targetCredentialsId = "{{.targetCredentialsId}}".replaceAll("/","-")
-            def targetSecretNamespace = "{{.targetCredentialsId}}".substring(0,"{{.targetCredentialsId}}".lastIndexOf("/"))
-            def targetSecretName = "{{.targetCredentialsId}}".substring("{{.targetCredentialsId}}".lastIndexOf("/")+1)
+            def targetCredentialsId = "{{.targetCredentialsId}}"
+            if(targetCredentialsId != "") {
+              targetCredentialsId = targetCredentialsId.replaceAll("/","-")
+            }
+            def targetSecretNamespace = "{{.targetCredentialsId}}"
+            if(targetSecretNamespace != "") {
+              targetSecretNamespace = targetSecretNamespace.substring(0,"{{.targetCredentialsId}}".lastIndexOf("/"))
+            }
+            def targetSecretName = "{{.targetCredentialsId}}"
+            if(targetSecretName != "") {
+              targetSecretName = targetSecretName.substring("{{.targetCredentialsId}}".lastIndexOf("/")+1)
+            }
+
             if ("{{.imageRepositoryMode}}" == "choice") {
                 TargetImage = "{{.targetImageRepositoryList.repositoryPath}}:{{.sourceImageTag}}"
                 targetCredentialsId = "{{.targetImageRepositoryList.credentialId}}"
