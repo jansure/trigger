@@ -7,7 +7,7 @@ metadata:
     displayName.en: SyncImage
     description.zh-CN: 同步镜像模板。将一个镜像从源仓库同步到目标仓库。若源镜像或目标镜像仓库为私有仓库（内网地址），需确保 Jenkins 服务与其在同一网络环境内，方可使用。
     description.en: Sync image template. Synchronize a Image tag from the source repository to the target repository. If the source image or target image repository is a private repository (intranet address), ensure that Jenkins services are available in the same network.
-    version: "4.12.24"
+    version: "4.12.25"
   labels:
     category: SyncImage
 spec:
@@ -109,7 +109,7 @@ spec:
     schema:
       type: imageRepositoryList
     binding:
-      - alaudaSyncImage.args.sourceImageRepository
+      - alaudaSyncImageTrigger.args.sourceImageRepository
     display:
       type: imageRepositoryList
       name:
@@ -127,7 +127,7 @@ spec:
         - "alterationTag"
         - "assignTag"
     binding:
-      - alaudaSyncImage.args.syncSourceImageTag
+      - alaudaSyncImageTrigger.args.syncSourceImageTag
     display:
       type: "radio"
       advanced: false
@@ -147,7 +147,7 @@ spec:
     schema:
       type: string
     binding:
-      - alaudaSyncImage.args.sourceImageTag
+      - alaudaSyncImageTrigger.args.sourceImageTag
     display:
       type: string
       advanced: false
@@ -172,7 +172,7 @@ spec:
         - "choice"
         - "input"
     binding:
-      - alaudaSyncImage.args.imageRepositoryMode
+      - alaudaSyncImageTrigger.args.imageRepositoryMode
     display:
       type: radio
       advanced: false
@@ -192,7 +192,7 @@ spec:
     schema:
       type: imageRepositoryList
     binding:
-      - alaudaSyncImage.args.targetImageRepositoryList
+      - alaudaSyncImageTrigger.args.targetImageRepositoryList
     display:
       type: imageRepositoryList
       name:
@@ -212,7 +212,7 @@ spec:
     schema:
       type: string
     binding:
-      - alaudaSyncImage.args.targetImageRepository
+      - alaudaSyncImageTrigger.args.targetImageRepository
     display:
       type: string
       name:
@@ -232,7 +232,7 @@ spec:
     schema:
       type: string
     binding:
-      - alaudaSyncImage.args.targetCredentialsId
+      - alaudaSyncImageTrigger.args.targetCredentialsId
     display:
       type: alauda.io/jenkinscredentials
       args:
